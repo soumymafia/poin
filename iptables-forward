@@ -1,10 +1,9 @@
 #!/bin/bash
 
-#created by Dominic Kabel
-#https://github.com/domkab16
+#created by SoumyMafia
+#https://t.me@Soumy_R
 
 # Shared under GNU v3
-# Mod By Janda Bper GGroup
 
 clear
 
@@ -20,8 +19,8 @@ clear
 	read -r "extport"
 
 	#Find vpn address
-	echo "Masukan IP VPS yang ingin Anda port forward"
-	read "vpnip"
+	echo "Masukan IP VPS yang ingin Anda port pointing"
+	read "vpsip"
 
 	#Find Internal port
 	echo "Masukan port internal"
@@ -41,7 +40,7 @@ clear
 
 	#Periksa kembali dengan pengguna apakah ini konfigurasi yang benar
 	echo "Apakah konfigurasi ini sudah benar ?"
-	echo "$vpnip:$intport dengan $protocol $extport sebagai port external? [y/n]"
+	echo "$vpsip:$intport dengan $protocol $extport sebagai port external? [y/n]"
 	read "konfirmasi"
 
 	#Execution
@@ -50,22 +49,22 @@ clear
 
 		if [ "$protocol" == "tcp" ]
 		then
-			iptables -A PREROUTING -t nat -i  ens4 -p tcp --dport "$extport" -j DNAT --to "$vpnip":"$intport"
-			iptables -A FORWARD -p tcp -d "$vpnip" --dport "$extport" -j ACCEPT
+			iptables -A PREROUTING -t nat -i  ens4 -p tcp --dport "$extport" -j DNAT --to "$vpsip":"$intport"
+			iptables -A FORWARD -p tcp -d "$vpsip" --dport "$extport" -j ACCEPT
 		fi
 
 		if [ "$protocol" == "udp" ]
 		then
-			iptables -A PREROUTING -t nat -i ens4 -p udp --dport "$extport" -j DNAT --to "$vpnip":"$intport"
-			iptables -A FORWARD -p udp -d "$vpnip" --dport "$extport" -j ACCEPT
+			iptables -A PREROUTING -t nat -i ens4 -p udp --dport "$extport" -j DNAT --to "$vpsip":"$intport"
+			iptables -A FORWARD -p udp -d "$vpsip" --dport "$extport" -j ACCEPT
 		fi
 
 		if [ "$protocol" == "tcp/udp" ]
 		then
-			iptables -A PREROUTING -t nat -i  ens4 -p tcp --dport "$extport" -j DNAT --to "$vpnip":"$intport"
-			iptables -A FORWARD -p tcp -d "$vpnip" --dport "$extport" -j ACCEPT
-			iptables -A PREROUTING -t nat -i ens4 -p udp --dport "$extport" -j DNAT --to "$vpnip":"$intport"
-			iptables -A FORWARD -p udp -d "$vpnip" --dport "$extport" -j ACCEPT
+			iptables -A PREROUTING -t nat -i  ens4 -p tcp --dport "$extport" -j DNAT --to "$vpsip":"$intport"
+			iptables -A FORWARD -p tcp -d "$vpsip" --dport "$extport" -j ACCEPT
+			iptables -A PREROUTING -t nat -i ens4 -p udp --dport "$extport" -j DNAT --to "$vpsip":"$intport"
+			iptables -A FORWARD -p udp -d "$vpsip" --dport "$extport" -j ACCEPT
 		fi
 
 	else
@@ -75,16 +74,15 @@ clear
 
 	#Asking To Save rules
 	echo "Apakah Anda ingin menyimpan aturan atau menghapusnya saat reboot? [y/n]"
-	echo "Harap reboot sebelum menjalankan dan menyimpan skrip atau aturan iptables ini"
 	read "simpan"
 
 	if [ "$simpan" == "y" ]
 	then
 		echo "Menyimpan"
-		iptables-save > /etc/iptables/rules.v4
+		iptables-save
 	fi
 
 	#Reminder to port foward server side
 	echo "Selesai! Ingatlah untuk menambahkan aturan firewall untuk $extport $protocol sisi server"
 	echo "Goodbye Jomblo!"
-	echo "Mod By Janda Baper Group"
+	echo "Created By SoumyMafia"
